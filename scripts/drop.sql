@@ -1,0 +1,8 @@
+-- =========================================
+-- DROP OBJECTS - TB_CLIENTE
+-- =========================================
+
+DROP TRIGGER TRG_CLIENTE_BU;
+DROP TRIGGER TRG_CLIENTE_BI;
+DROP TABLE TB_CLIENTE CASCADE CONSTRAINTS;
+DROP SEQUENCE SEQ_CLIENTE;
