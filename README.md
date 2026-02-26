@@ -466,4 +466,15 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 	END PKG_CLIENTE;
 	/		
 
+	### 🎯 Resultado
+		✔ API completa
+		✔ Validação centralizada
+		✔ Insert / Update / Delete
+		✔ Listagem com filtros
+		✔ Sem commit interno
+		✔ Erros padronizados
+		✔ Pronto para Forms chamar via:
 
+## US03 — Tela Oracle Forms (Cadastro de Cliente)
+
+	...
