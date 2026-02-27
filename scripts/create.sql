@@ -2,6 +2,8 @@
 -- CREATE OBJECTS - TB_CLIENTE
 -- =========================================
 
+CONN DEVAPP/dev123@XEDEV;
+
 -- 1. TABELA
 CREATE TABLE TB_CLIENTE (
     ID_CLIENTE        NUMBER(10)         NOT NULL,
@@ -67,3 +69,4 @@ BEGIN
     :NEW.DT_ATUALIZACAO := SYSTIMESTAMP;
 END;
 /
+

@@ -1,3 +1,5 @@
+CONN DEVAPP/dev123@XEDEV;
+
 CREATE OR REPLACE PACKAGE PKG_CLIENTE AS
 
     -- =========================================

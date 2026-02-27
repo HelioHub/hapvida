@@ -28,7 +28,8 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 			)
 			
 		  )
-		  
+		
+		Obs.: minha pasta no caso 'C:\Oracle\Middleware\Builder'.
 		  
 	### Instalçao e Configuração do SQL Developer:
 ![## Banco](https://github.com/HelioHub/hapvida/blob/main/images/SQLDeveloper.PNG)
@@ -63,7 +64,7 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		| DT_ATUALIZACAO : TIMESTAMP           |
 		+--------------------------------------+	
 
-	### 🧠 Observações importantes (pensando já no Forms)
+	### Observações importantes (pensando já no Forms)
 		✔ PK numérica com sequence → ideal para Data Block Wizard
 		✔ EMAIL unique → valida automaticamente no banco
 		✔ UF com CHECK → Forms já mostra erro automático
@@ -71,6 +72,43 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		✔ DT_ATUALIZACAO via trigger → controle automático
 
 	### Scripts create.sql (criação) e drop.sql (remoção):
+
+			..\scripts\create.sql: 
+			-- =========================================
+			-- CREATE OBJECTS - USER no Banco pluggable (XEPDB1) 
+			-- =========================================
+			CONN SYSTEM/ORACLE@XE;
+
+			ALTER SESSION SET CONTAINER = XEPDB1;
+
+			DROP USER DEVAPP CASCADE;
+
+			CREATE USER DEVAPP
+			IDENTIFIED BY dev123
+			DEFAULT TABLESPACE USERS QUOTA UNLIMITED ON USERS;
+
+			GRANT CREATE SESSION TO DEVAPP;
+			GRANT RESOURCE TO DEVAPP;
+			GRANT CONNECT TO DEVAPP;
+			GRANT DBA TO DEVAPP; 
+	
+	        OBS.:
+	        ---- NÃO É RECOMENDADO TOTAL PODER DE 'DBA' PARA O USUÁRIO DEV, CORRETO FORNECER SOMENTE OS GRANTS NECESSÁRIOS. MAS, SÓ TESTE AQUI...
+			----
+
+			..\scripts\tnsnames.ora: 
+			-- =========================================
+			-- CREATE SERVICE_NAME XEDEV NO TNSNAMES.ORA (C:\app\hislindo\product\21c\homes\OraDB21Home1\network\admin\tnsnames.ora - minha pasta no meu caso)
+			-- =========================================
+			XEDEV =
+			  (DESCRIPTION =
+				(ADDRESS = (PROTOCOL = TCP)(HOST = HELIOSONY)(PORT = 1521))
+				(CONNECT_DATA =
+				  (SERVER = DEDICATED)
+				  (SERVICE_NAME = XEPDB1)
+				)
+			  )
+
 	
 			..\scripts\create.sql: 
 			-- =========================================
@@ -154,6 +192,7 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 			DROP TABLE TB_CLIENTE CASCADE CONSTRAINTS;
 			DROP SEQUENCE SEQ_CLIENTE;
 
+
 ## US02 — Camada PL/SQL (Package de Negócio)			
 		
 			
@@ -165,7 +204,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 	-- =========================================
 	CREATE OR REPLACE PACKAGE PKG_CLIENTE AS
 
-		-- =========================================
 		-- FUNÇÕES UTILITÁRIAS
 		-- =========================================
 
@@ -178,7 +216,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		) RETURN VARCHAR2;
 
 
-		-- =========================================
 		-- CRUD
 		-- =========================================
 
@@ -225,7 +262,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 	-- =========================================
 	CREATE OR REPLACE PACKAGE BODY PKG_CLIENTE AS
 
-		-- =========================================
 		-- CONSTANTES DE ERRO
 		-- =========================================
 		c_erro_nome_obrigatorio   CONSTANT NUMBER := -20001;
@@ -235,7 +271,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		c_erro_cliente_nao_existe CONSTANT NUMBER := -20005;
 
 
-		-- =========================================
 		-- FUNÇÃO VALIDAR EMAIL
 		-- =========================================
 		FUNCTION FN_VALIDAR_EMAIL (
@@ -259,7 +294,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		END;
 
 
-		-- =========================================
 		-- FUNÇÃO NORMALIZAR CEP
 		-- =========================================
 		FUNCTION FN_NORMALIZAR_CEP (
@@ -285,7 +319,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		END;
 
 
-		-- =========================================
 		-- PROCEDURE VALIDAR DADOS (INTERNA)
 		-- =========================================
 		PROCEDURE VALIDAR_DADOS (
@@ -329,7 +362,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		END;
 
 
-		-- =========================================
 		-- INSERIR
 		-- =========================================
 		PROCEDURE PRC_INSERIR_CLIENTE (
@@ -377,7 +409,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		END;
 
 
-		-- =========================================
 		-- ATUALIZAR
 		-- =========================================
 		PROCEDURE PRC_ATUALIZAR_CLIENTE (
@@ -425,7 +456,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		END;
 
 
-		-- =========================================
 		-- DELETAR
 		-- =========================================
 		PROCEDURE PRC_DELETAR_CLIENTE (
@@ -445,7 +475,6 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 		END;
 
 
-		-- =========================================
 		-- LISTAR
 		-- =========================================
 		PROCEDURE PRC_LISTAR_CLIENTES (
@@ -466,7 +495,15 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 	END PKG_CLIENTE;
 	/		
 
-	### 🎯 Resultado
+	..\synonym.sql:
+	-- =========================================
+	-- SYNONYM OBJECTS 
+	-- =========================================
+	CREATE PUBLIC SYNONYM TB_CLIENTE FOR DEVAPP.TB_CLIENTE;
+	CREATE PUBLIC SYNONYM PKG_CLIENTE FOR DEVAPP.PKG_CLIENTE;
+	CREATE PUBLIC SYNONYM SEQ_CLIENTE FOR DEVAPP.SEQ_CLIENTE;
+
+	### Arquitetura
 		✔ API completa
 		✔ Validação centralizada
 		✔ Insert / Update / Delete
