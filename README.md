@@ -514,4 +514,7 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 
 ## US03 — Tela Oracle Forms (Cadastro de Cliente)
 
-	...
+	### Conexão do FORM com o Banco XE 21c baseado do TNSNAMES.ORA cononforme imagem:
+![## Form](https://github.com/HelioHub/hapvida/blob/main/images/ConexaoFORMcomBANCOXE.PNG)
+	
+	
