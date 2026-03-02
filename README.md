@@ -1030,3 +1030,18 @@ CRUD de Clientes utilizando ORACLE FORM e PL/SQL.
 
 		END PKG_CLIENTE;
 		/
+
+
+
+## US06 - Fluxo da Tela (Forms) OK.
+	1. Novo → limpa campos → foco em NOME.
+	2. Salvar
+		ID_CLIENTE nulo → PRC_INSERIR_CLIENTE → preencher ID_CLIENTE retornado → COMMIT.
+		Caso contrário → PRC_ATUALIZAR_CLIENTE → COMMIT.
+	3. Excluir → confirmar → PRC_DELETAR_CLIENTE → COMMIT → limpar/atualizar tela.
+	4. Pesquisar → filtros (NOME, EMAIL) → PRC_LISTAR_CLIENTES (Ref Cursor) → bloco multi-registro.
+	5. Cancelar → ROLLBACK.
+	6. Validações nos itens (WHEN-VALIDATE-ITEM) chamando as functions do package
+
+
+
